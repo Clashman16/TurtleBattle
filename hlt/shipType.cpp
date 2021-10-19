@@ -1,0 +1,1 @@
+enum ShipType { Scout = 0, Beacon = 1, Picker = 2, Spy = 3, Outpost = 4, Bomb = 5 };
