@@ -37,18 +37,6 @@ int main(int argc, char* argv[])
 
         vector<Command> command_queue;
 
-        for (const auto& ship_iterator : me->ships) {
-            shared_ptr<Ship> ship = ship_iterator.second;
-            if (game_map->at(ship)->halite < constants::MAX_HALITE / 10 || ship->is_full()) { //si la case a - de 100H ou la tortue a 1000H
-                Direction random_direction = ALL_CARDINALS[rng() % 4];//bouge dans une dir random entre Nord Sud Est Ouest
-                command_queue.push_back(ship->move(random_direction));
-            }
-            else {
-                command_queue.push_back(ship->stay_still());//sinon, mine
-            }
-        }
-
-
         if(me->ships.size() == 0)
         {
             if (me->halite >= constants::SHIP_COST) //si on a plus de 1000H, se prépare à faire une tortue
@@ -58,11 +46,27 @@ int main(int argc, char* argv[])
                     command_queue.push_back(me->shipyard->spawn());
                     ShipType type = ShipType::Scout;
                     typedShips.push_back(type);
+
+                    /*const auto& scout = me->ships.end();
+                    command_queue.push_back(scout->move());*/
                 }
             }
         }
         else
         {
+            for (const auto& ship_iterator : me->ships)
+            {
+                shared_ptr<Ship> ship = ship_iterator.second;
+                if (game_map->at(ship)->halite < constants::MAX_HALITE / 10 || ship->is_full()) //si la case a - de 100H ou la tortue a 1000H
+                { 
+                    Direction random_direction = ALL_CARDINALS[rng() % 4];//bouge dans une dir random entre Nord Sud Est Ouest
+                    command_queue.push_back(ship->move(random_direction));
+                }
+                else {
+                    command_queue.push_back(ship->stay_still());//sinon, mine
+                }
+            }
+
             if (me->halite >= constants::SHIP_COST)
             {
 
