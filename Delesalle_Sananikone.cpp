@@ -49,7 +49,10 @@ int main(int argc, char* argv[]) {
         {
             if (me->halite >= constants::SHIP_COST)
             {
-
+                if( game.turn_number <= 200 && !game_map->at(me->shipyard)->is_occupied())
+                {
+                    command_queue.push_back(me->shipyard->spawn());
+                }
             }
         }
         else
