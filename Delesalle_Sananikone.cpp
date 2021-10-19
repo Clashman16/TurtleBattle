@@ -44,6 +44,22 @@ int main(int argc, char* argv[]) {
             }
         }
 
+
+        if(me->ships.size() == 0)
+        {
+            if (me->halite >= constants::SHIP_COST)
+            {
+
+            }
+        }
+        else
+        {
+            if (me->halite >= constants::SHIP_COST)
+            {
+
+            }
+        }
+
         if (
             game.turn_number <= 200 &&
             me->halite >= constants::SHIP_COST &&
