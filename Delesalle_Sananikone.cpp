@@ -1,14 +1,15 @@
 #include "game.hpp"
 #include "constants.hpp"
 #include "log.hpp"
-
+#include "shipType.cpp"
 #include <random>
 #include <ctime>
 
 using namespace std;
 using namespace hlt;
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     unsigned int rng_seed;
     if (argc > 1) {
         rng_seed = static_cast<unsigned int>(stoul(argv[1]));
@@ -25,6 +26,9 @@ int main(int argc, char* argv[]) {
     game.ready("MyCppBot");
 
     log::log("Successfully created bot! My Player ID is " + to_string(game.my_id) + ". Bot rng seed is " + to_string(rng_seed) + ".");
+
+    std::list<ShipType> typedShips;
+
 
     for (;;) {
         game.update_frame();
@@ -52,6 +56,8 @@ int main(int argc, char* argv[]) {
                 if( game.turn_number <= 200 && !game_map->at(me->shipyard)->is_occupied())
                 {
                     command_queue.push_back(me->shipyard->spawn());
+                    ShipType type = ShipType::Scout;
+                    typedShips.push_back(type);
                 }
             }
         }
