@@ -39,21 +39,21 @@ int main(int argc, char* argv[])
 
         for (const auto& ship_iterator : me->ships) {
             shared_ptr<Ship> ship = ship_iterator.second;
-            if (game_map->at(ship)->halite < constants::MAX_HALITE / 10 || ship->is_full()) {
-                Direction random_direction = ALL_CARDINALS[rng() % 4];
+            if (game_map->at(ship)->halite < constants::MAX_HALITE / 10 || ship->is_full()) { //si la case a - de 100H ou la tortue a 1000H
+                Direction random_direction = ALL_CARDINALS[rng() % 4];//bouge dans une dir random entre Nord Sud Est Ouest
                 command_queue.push_back(ship->move(random_direction));
             }
             else {
-                command_queue.push_back(ship->stay_still());
+                command_queue.push_back(ship->stay_still());//sinon, mine
             }
         }
 
 
         if(me->ships.size() == 0)
         {
-            if (me->halite >= constants::SHIP_COST)
+            if (me->halite >= constants::SHIP_COST) //si on a plus de 1000H, se prépare à faire une tortue
             {
-                if( game.turn_number <= 200 && !game_map->at(me->shipyard)->is_occupied())
+                if( game.turn_number <= 200 && !game_map->at(me->shipyard)->is_occupied()) //si c'est le tour<200 et que y'a rien au chantier
                 {
                     command_queue.push_back(me->shipyard->spawn());
                     ShipType type = ShipType::Scout;
@@ -69,12 +69,9 @@ int main(int argc, char* argv[])
             }
         }
 
-        if (
-            game.turn_number <= 200 &&
-            me->halite >= constants::SHIP_COST &&
-            !game_map->at(me->shipyard)->is_occupied())
+        if (game.turn_number <= 200 && me->halite >= constants::SHIP_COST && !game_map->at(me->shipyard)->is_occupied())
         {
-            command_queue.push_back(me->shipyard->spawn());
+            command_queue.push_back(me->shipyard->spawn()); //spawn un chantier?
         }
 
         if (!game.end_turn(command_queue)) {
