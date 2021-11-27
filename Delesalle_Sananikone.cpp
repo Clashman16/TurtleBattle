@@ -46,24 +46,41 @@ int main(int argc, char* argv[])
                     command_queue.push_back(me->shipyard->spawn());
                     ShipType type = ShipType::Scout;
                     typedShips.push_back(type);
-
-                    /*const auto& scout = me->ships.end();
-                    command_queue.push_back(scout->move());*/
                 }
             }
         }
-        else
+        if (me->ships.size() != 0) // When player has more than 0 ship on the map
         {
-            for (const auto& ship_iterator : me->ships)
-            {
-                shared_ptr<Ship> ship = ship_iterator.second;
-                if (game_map->at(ship)->halite < constants::MAX_HALITE / 10 || ship->is_full()) //si la case a - de 100H ou la tortue a 1000H
-                { 
-                    Direction random_direction = ALL_CARDINALS[rng() % 4];//bouge dans une dir random entre Nord Sud Est Ouest
-                    command_queue.push_back(ship->move(random_direction));
-                }
-                else {
-                    command_queue.push_back(ship->stay_still());//sinon, mine
+            for (std::unordered_map<EntityId, std::shared_ptr<Ship>>::iterator ship_iterator = me->ships.begin(); ship_iterator != me->ships.end(); ship_iterator++) // For all ships
+            {   
+                for (list<ShipType>::iterator type_iterator = typedShips.begin(); type_iterator != typedShips.end(); type_iterator++) // and for all kinds of ship
+                {
+                    // Get which ship the loop is processing
+                    int shipIndex = std::distance(me->ships.begin(), ship_iterator);
+                    std::shared_ptr<Ship> ship = me->ships.at(shipIndex);
+
+                    if (std::distance(typedShips.begin(), type_iterator) == shipIndex) // Get the type of the ship
+                    {
+                        if (*type_iterator == ShipType::Scout) // If the ship is a scout
+                        {
+                            Direction random_direction = ALL_CARDINALS[rng() % 4];//bouge dans une dir random entre Nord Sud Est Ouest
+                            command_queue.push_back(ship->move(random_direction));
+                        }
+
+                        else
+                        {
+                            if (game_map->at(ship)->halite < constants::MAX_HALITE / 10 || ship->is_full()) //si la case a - de 100H ou la tortue a 1000H
+                            {
+                                /*Direction random_direction = ALL_CARDINALS[rng() % 4];//bouge dans une dir random entre Nord Sud Est Ouest
+                                command_queue.push_back(ship->move(random_direction));*/
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        command_queue.push_back(ship->stay_still());//sinon, mine
+                    }
                 }
             }
 
