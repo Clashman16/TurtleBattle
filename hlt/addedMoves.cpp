@@ -1,10 +1,10 @@
 #include <command.hpp>
 #include <ship.hpp>
 #include <vector>
-#include <addedCommands.hpp>
+#include <addedMoves.hpp>
 
 
-void AddedCommand::moveToTreasure(vector<Command> command_queue, shared_ptr<Ship> scout)
+void AddedMove::moveToTreasure(vector<Command> command_queue, shared_ptr<Ship> scout)
 {
 
 	array<Direction, 4> directionOrder = ALL_CARDINALS;
@@ -31,10 +31,10 @@ void AddedCommand::moveToTreasure(vector<Command> command_queue, shared_ptr<Ship
 	command_queue.push_back(scout->move(random_direction))
 }
 
-void AddedCommand::moveToOutpost()
+void AddedMove::moveToOutpost()
 {
 }
 
-void AddedCommand::moveToEnnemi()
+void AddedMove::moveToEnnemi()
 {
 }
