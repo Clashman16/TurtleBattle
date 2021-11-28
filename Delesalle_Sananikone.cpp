@@ -51,15 +51,17 @@ int main(int argc, char* argv[])
         }
         if (me->ships.size() != 0) // When player has more than 0 ship on the map
         {
-            for (std::unordered_map<EntityId, std::shared_ptr<Ship>>::iterator ship_iterator = me->ships.begin(); ship_iterator != me->ships.end(); ship_iterator++) // For all ships
+            for (unordered_map<EntityId, shared_ptr<Ship>>::iterator ship_iterator = me->ships.begin(); ship_iterator != me->ships.end(); ship_iterator++) // For all ships
             {   
                 for (list<ShipType>::iterator type_iterator = typedShips.begin(); type_iterator != typedShips.end(); type_iterator++) // and for all kinds of ship
                 {
                     // Get which ship the loop is processing
-                    int shipIndex = std::distance(me->ships.begin(), ship_iterator);
-                    std::shared_ptr<Ship> ship = me->ships.at(shipIndex);
+                    int shipIndex = distance(me->ships.begin(), ship_iterator);
+                    shared_ptr<Ship> ship = me->ships.at(shipIndex);
 
-                    if (std::distance(typedShips.begin(), type_iterator) == shipIndex) // Get the type of the ship
+                    
+
+                    if (distance(typedShips.begin(), type_iterator) == shipIndex) // Get the type of the ship
                     {
                         if (*type_iterator == ShipType::Scout) // If the ship is a scout
                         {
