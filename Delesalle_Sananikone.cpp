@@ -4,6 +4,7 @@
 #include "shipType.cpp"
 #include <random>
 #include <ctime>
+#include <addedMoves.hpp>
 
 using namespace std;
 using namespace hlt;
@@ -28,7 +29,6 @@ int main(int argc, char* argv[])
     log::log("Successfully created bot! My Player ID is " + to_string(game.my_id) + ". Bot rng seed is " + to_string(rng_seed) + ".");
 
     std::list<ShipType> typedShips;
-
 
     for (;;) {
         game.update_frame();
@@ -59,14 +59,11 @@ int main(int argc, char* argv[])
                     int shipIndex = distance(me->ships.begin(), ship_iterator);
                     shared_ptr<Ship> ship = me->ships.at(shipIndex);
 
-                    
-
                     if (distance(typedShips.begin(), type_iterator) == shipIndex) // Get the type of the ship
                     {
                         if (*type_iterator == ShipType::Scout) // If the ship is a scout
                         {
-                            Direction random_direction = ALL_CARDINALS[rng() % 4];//bouge dans une dir random entre Nord Sud Est Ouest
-                            command_queue.push_back(ship->move(random_direction));
+                            AddedMoves.moveToTreasure(command_queue, ship, game_map); //it will find the cell with the most halite
                         }
 
                         else
