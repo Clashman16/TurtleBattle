@@ -37,6 +37,8 @@ int main(int argc, char* argv[])
 
         vector<Command> command_queue;
 
+        AddedMoves addedMoves;
+
         if(me->ships.size() == 0)
         {
             if (me->halite >= constants::SHIP_COST) //si on a plus de 1000H, se prépare à faire une tortue
@@ -63,7 +65,7 @@ int main(int argc, char* argv[])
                     {
                         if (*type_iterator == ShipType::Scout) // If the ship is a scout
                         {
-                            AddedMoves.moveToTreasure(command_queue, ship, game_map); //it will find the cell with the most halite
+                            addedMoves.moveToTreasure(command_queue, ship, game_map); //it will find the cell with the most halite
                         }
 
                         else
