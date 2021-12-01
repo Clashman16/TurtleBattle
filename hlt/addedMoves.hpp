@@ -29,17 +29,17 @@ struct AddedMoves
 		}
 	}
 
-	void moveToTreasure(vector<Command> command_queue, shared_ptr<Ship> scout, unique_ptr<GameMap> map)
+	void moveToTreasure(vector<Command> command_queue, shared_ptr<Ship> scout, GameMap map)
 	{
 		Halite maxHalite;
 		int posX, posY;
 
 		//Get the cell which contains the most halite
-		for (int x = 0; x <= map.get()->width; x++)
+		for (int x = 0; x <= map.width; x++)
 		{
-			for (int y = 0; y <= map.get()->height; y++)
+			for (int y = 0; y <= map.height; y++)
 			{
-				Halite haliteAtPos = map.get()->at(Position(x, y))->halite;
+				Halite haliteAtPos = map.at(Position(x, y))->halite;
 
 				if (haliteAtPos > maxHalite)
 				{

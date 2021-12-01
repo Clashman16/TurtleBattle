@@ -28,7 +28,9 @@ int main(int argc, char* argv[])
 
     log::log("Successfully created bot! My Player ID is " + to_string(game.my_id) + ". Bot rng seed is " + to_string(rng_seed) + ".");
 
-    std::list<ShipType> typedShips;
+    //Initializing our updates
+    std::list<ShipType> typedShips; //Contains all kinds of ship identified by index
+    AddedMoves addedMoves; //Calls all additionnal moves
 
     for (;;) {
         game.update_frame();
@@ -36,8 +38,6 @@ int main(int argc, char* argv[])
         unique_ptr<GameMap>& game_map = game.game_map;
 
         vector<Command> command_queue;
-
-        AddedMoves addedMoves;
 
         if(me->ships.size() == 0)
         {
@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
                     {
                         if (*type_iterator == ShipType::Scout) // If the ship is a scout
                         {
-                            addedMoves.moveToTreasure(command_queue, ship, game_map); //it will find the cell with the most halite
+                            addedMoves.moveToTreasure(command_queue, ship, * game_map.get()); //it will find the cell with the most halite
                         }
 
                         else
