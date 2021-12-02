@@ -7,7 +7,7 @@ struct AddedMoves
 
 	void goToPosition(vector<Command> command_queue, shared_ptr<Ship> ship, Position pos)
 	{
-		while (ship.get()->position != pos)
+		if (ship.get()->position != pos)
 		{
 			if (ship.get()->position.x > pos.x)
 			{
@@ -18,7 +18,7 @@ struct AddedMoves
 				command_queue.push_back(ship->move(Direction::EAST));
 			}
 
-			if (ship.get()->position.y > pos.y)
+			else if (ship.get()->position.y > pos.y)
 			{
 				command_queue.push_back(ship->move(Direction::SOUTH));
 			}
@@ -31,29 +31,31 @@ struct AddedMoves
 
 	void moveToTreasure(vector<Command> command_queue, shared_ptr<Ship> scout, GameMap map)
 	{
-		Halite maxHalite;
-		int posX, posY;
-
-		//Get the cell which contains the most halite
-		for (int x = 0; x <= map.width; x++)
+		if (treasurePosition.x == NULL)
 		{
-			for (int y = 0; y <= map.height; y++)
-			{
-				Halite haliteAtPos = map.at(Position(x, y))->halite;
+			Halite maxHalite = 0;
+			int posX, posY = 0;
 
-				if (haliteAtPos > maxHalite)
+			//Get the cell which contains the most halite
+			for (int x = 0; x <= map.width; x++)
+			{
+				for (int y = 0; y <= map.height; y++)
 				{
-					maxHalite = haliteAtPos;
-					posX = x;
-					posY = y;
+					Halite haliteAtPos = map.at(Position(x, y))->halite;
+
+					if (haliteAtPos > maxHalite)
+					{
+						maxHalite = haliteAtPos;
+						posX = x;
+						posY = y;
+					}
 				}
 			}
+			treasurePosition = Position(posX, posY);
 		}
 
 		//Make the scout got to this cell
-		goToPosition(command_queue, scout, Position(posX, posY));
-		//Get the scout's position
-		treasurePosition = scout.get()->position;
+		goToPosition(command_queue, scout, treasurePosition);
 	}
 
 	void moveToOutpost()
