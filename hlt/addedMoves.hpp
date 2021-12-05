@@ -1,4 +1,4 @@
-using namespace std;
+	using namespace std;
 using namespace hlt;
 
 struct AddedMoves
@@ -64,5 +64,28 @@ struct AddedMoves
 
 	void moveToEnnemi()
 	{
+	}
+
+	void followScout(vector<Command> command_queue, shared_ptr<Ship> Picker, Position treasurePosition) 
+	{
+		if (Picker.element_type->position != treasurePosition) {
+			if (Picker.get()->position.x > treasurePosition.x)
+			{
+				command_queue.push_back(Picker->move(Direction::WEST));
+			}
+			else if (Picker.get()->position.x < treasurePosition.x)
+			{
+				command_queue.push_back(Picker->move(Direction::EAST));
+			}
+
+			else if (Picker.get()->position.y > treasurePosition.y)
+			{
+				command_queue.push_back(Picker->move(Direction::SOUTH));
+			}
+			else if (Picker.get()->position.y < treasurePosition.y)
+			{
+				command_queue.push_back(Picker->move(Direction::EAST));
+			}
+		}
 	}
 };
