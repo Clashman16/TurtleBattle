@@ -51,7 +51,8 @@ int main(int argc, char* argv[])
                 }
             }
         }
-        if (me->ships.size() != 0) // When player has more than 0 ship on the map
+
+        else // When player has more than 0 ship on the map
         {
             for (unordered_map<EntityId, shared_ptr<Ship>>::iterator ship_iterator = me->ships.begin(); ship_iterator != me->ships.end(); ship_iterator++) // For all ships
             {   
@@ -84,14 +85,9 @@ int main(int argc, char* argv[])
                     }
                 }
             }
-
-            if (me->halite >= constants::SHIP_COST)
-            {
-
-            }
         }
 
-        if (game.turn_number <= 200 && me->halite >= constants::SHIP_COST && !game_map->at(me->shipyard)->is_occupied())
+        if (game.turn_number <= 200 && me->halite >= constants::SHIP_COST && !game_map->at(me->shipyard)->is_occupied() && me->ships.size() == 0)
         {
             command_queue.push_back(me->shipyard->spawn()); //spawn un chantier?
         }
