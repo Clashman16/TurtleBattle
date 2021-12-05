@@ -68,7 +68,7 @@ struct AddedMoves
 
 	void followScout(vector<Command> command_queue, shared_ptr<Ship> Picker, Position treasurePosition) 
 	{
-		if (Picker.element_type->position != treasurePosition) {
+		if (Picker.get()->position != treasurePosition) {
 			if (Picker.get()->position.x > treasurePosition.x)
 			{
 				command_queue.push_back(Picker->move(Direction::WEST));
