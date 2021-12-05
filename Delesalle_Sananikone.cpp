@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
     log::log("Successfully created bot! My Player ID is " + to_string(game.my_id) + ". Bot rng seed is " + to_string(rng_seed) + ".");
 
     //Initializing our updates
-    std::list<ShipType> typedShips; //Contains all kinds of ship identified by index
+    list<ShipType> typedShips; //Contains all kinds of ship identified by index
     AddedMoves addedMoves; //Calls all additionnal moves
 
     for (;;) {
@@ -39,44 +39,24 @@ int main(int argc, char* argv[])
 
         vector<Command> command_queue;
 
-        if(me->ships.size() == 0)
-        {
-            if (me->halite >= constants::SHIP_COST) //si on a plus de 1000H, se prépare à faire une tortue
-            {
-                if( game.turn_number <= 200 && !game_map->at(me->shipyard)->is_occupied()) //si c'est le tour<200 et que y'a rien au chantier
-                {
-                    command_queue.push_back(me->shipyard->spawn());
-                    ShipType type = ShipType::Scout;
-                    typedShips.push_back(type);
-                }
-            }
-        }
+        int shipsCount = me->ships.size();
 
-        else // When player has more than 0 ship on the map
+        /*if (me->ships.size() > 0) // When player has more than 0 ship on the map
         {
             for (unordered_map<EntityId, shared_ptr<Ship>>::iterator ship_iterator = me->ships.begin(); ship_iterator != me->ships.end(); ship_iterator++) // For all ships
             {   
-                for (list<ShipType>::iterator type_iterator = typedShips.begin(); type_iterator != typedShips.end(); type_iterator++) // and for all kinds of ship
-                {
-                    // Get which ship the loop is processing
-                    int shipIndex = distance(me->ships.begin(), ship_iterator);
-                    shared_ptr<Ship> ship = me->ships.at(shipIndex);
+                int shipIndex = distance(me->ships.begin(), ship_iterator); // get the index of the ship
+                shared_ptr<Ship> ship = me->ships.at(shipIndex); // get the ship
 
-                    if (distance(typedShips.begin(), type_iterator) == shipIndex) // Get the type of the ship
+                for(list<ShipType>::iterator type_iterator = typedShips.begin(); type_iterator != typedShips.end(); type_iterator++) // and for all kinds of ship
+                {
+                    int typeIndex = distance(typedShips.begin(), type_iterator); // get the index of the ship's type
+
+                    if(typeIndex == shipIndex)
                     {
                         if (*type_iterator == ShipType::Scout) // If the ship is a scout
                         {
                             addedMoves.moveToTreasure(command_queue, ship, * game_map.get()); //it will find the cell with the most halite
-                        }
-
-                        else
-                        {
-                            if (game_map->at(ship)->halite < constants::MAX_HALITE / 10 || ship->is_full()) //si la case a - de 100H ou la tortue a 1000H
-                            {
-                                /*Direction random_direction = ALL_CARDINALS[rng() % 4];//bouge dans une dir random entre Nord Sud Est Ouest
-                                command_queue.push_back(ship->move(random_direction));*/
-
-                            }
                         }
                     }
                     else
@@ -85,11 +65,15 @@ int main(int argc, char* argv[])
                     }
                 }
             }
-        }
-
-        if (game.turn_number <= 200 && me->halite >= constants::SHIP_COST && !game_map->at(me->shipyard)->is_occupied() && me->ships.size() == 0)
+        }*/
+        if (shipsCount == 0)
         {
-            command_queue.push_back(me->shipyard->spawn()); //spawn un chantier?
+            if (game.turn_number <= 200 && me->halite >= constants::SHIP_COST && !game_map->at(me->shipyard)->is_occupied())
+            {
+                ShipType type = ShipType::Scout;
+                typedShips.push_back(type);
+                command_queue.push_back(me->shipyard->spawn());
+            }
         }
 
         if (!game.end_turn(command_queue)) {
