@@ -85,9 +85,11 @@ int main(int argc, char* argv[])
                         case Beacon: // If the ship is a beacon
                             if(game_map->at(addedMoves.treasurePosition) == 0)
                             {
+                                //addedMoves.treasurePosition.x = 0;
                                 type_iterator.second = Picker; //it becomes a picker
                             }
-                            move = ship->stay_still(); break;
+                            move = ship->stay_still();
+                            break;
                     }
                 }
 
@@ -96,20 +98,25 @@ int main(int argc, char* argv[])
                     command_queue.push_back(move);
                 }
             }
-            else {
+            else
+            {
                 typedShips.erase(type_iterator.first);
             }
         }
 
-        if (shipsCount == 0)
+        if (game.turn_number <= constants::MAX_TURNS && me->halite >= constants::SHIP_COST && !game_map->at(me->shipyard)->is_occupied())
         {
-            if (game.turn_number <= constants::MAX_TURNS && me->halite >= constants::SHIP_COST && !game_map->at(me->shipyard)->is_occupied())
+            if (shipsCount == 0)
             {
                 command_queue.push_back(me->shipyard->spawn());
                 lastSpawnedShip = Scout;
             }
+            else if (addedMoves.treasurePosition.x != NULL)
+            {
+                command_queue.push_back(me->shipyard->spawn());
+                lastSpawnedShip = Picker;
+            }
         }
-
 
         if (!game.end_turn(command_queue)) {
             break;
