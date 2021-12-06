@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 
     //Initializing our updates
     //unordered_map<shared_ptr<Ship>, ShipType> typedShips; //Contains all kinds of ship identified by index
-    unordered_map<shared_ptr<Ship>, ShipType> typedShips; //Contains all kinds of ship identified by index
+    unordered_map<EntityId, ShipType> typedShips; //Contains all kinds of ship identified by index
     AddedMoves addedMoves; //Calls all additionnal moves
     ShipType lastSpawnedShip = Nothing;
 
@@ -45,11 +45,11 @@ int main(int argc, char* argv[])
 
         if (lastSpawnedShip != Nothing)
         {
-            shared_ptr<Ship> ship = prev(me->ships.end())->second;
+            shared_ptr<Ship>& ship = prev(me->ships.end())->second;
 
-            pair<shared_ptr<Ship>, ShipType> typedShip(ship, lastSpawnedShip);
+            pair<EntityId, ShipType> typedShip(ship->id, lastSpawnedShip);
 
-            if (typedShips.find(ship) == typedShips.end())
+            if (typedShips.find(ship->id) == typedShips.end())
             {
                 log::log("new bot spawned");
                 typedShips.insert(typedShip);
@@ -57,25 +57,34 @@ int main(int argc, char* argv[])
             lastSpawnedShip = Nothing;
         }
 
-        for (auto type_iterator : typedShips) // For all kinds of ship
+        for (auto& type_iterator : typedShips) // For all kinds of ship
         {
             Command move;
 
-            if (game_map->at(type_iterator.first)->halite < constants::MAX_HALITE / 10 || type_iterator.first->is_full())
-            {
-                if (type_iterator.second == ShipType::Scout) // If the ship is a scout
+            auto ship_it = me->ships.find(type_iterator.first);
+
+            if (ship_it != me->ships.end()) {
+                auto& ship = me->ships.find(type_iterator.first)->second;
+
+                if (game_map->at(ship)->halite < constants::MAX_HALITE / 10 || ship->is_full())
                 {
-                    move = addedMoves.moveToTreasure(type_iterator.first, *game_map); //it will find the cell with the most halite
+                    if (type_iterator.second == ShipType::Scout) // If the ship is a scout
+                    {
+                        move = addedMoves.moveToTreasure(ship, *game_map); //it will find the cell with the most halite
+                    }
+                }
+                else
+                {
+                    move = ship->stay_still();
+                }
+
+                if (find(command_queue.begin(), command_queue.end(), move) == command_queue.end())
+                {
+                    command_queue.push_back(move);
                 }
             }
-            else
-            {
-                move = type_iterator.first->stay_still();
-            }
-
-            if(find(command_queue.begin(), command_queue.end(), move) == command_queue.end())
-            {
-                command_queue.push_back(move);
+            else {
+                typedShips.erase(type_iterator.first);
             }
         }
 
