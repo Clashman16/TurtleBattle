@@ -1,2 +1,11 @@
 ﻿  Delesalle_Sananikone.cpp
-D:\Documents\Jeux\ENJMIN\Delesalle_Sananikone\hlt\addedMoves.hpp(44): error C4700: variable locale 'maxHalite' non initialisée utilisée
+  command.cpp
+  constants.cpp
+  dropoff.cpp
+  game.cpp
+  game_map.cpp
+  log.cpp
+  player.cpp
+  ship.cpp
+  Génération de code en cours...
+  Delesalle_Sananikone.vcxproj -> C:\Users\banan\Documents\GitHubKraken\TurtleBattle\Debug\Delesalle_Sananikone.exe
