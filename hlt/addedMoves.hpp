@@ -1,35 +1,41 @@
-	using namespace std;
+using namespace std;
 using namespace hlt;
 
 struct AddedMoves
 {
 	Position treasurePosition;
 
-	void goToPosition(vector<Command> command_queue, shared_ptr<Ship> ship, Position pos)
+	Command goToPosition(shared_ptr<Ship> ship, Position pos)
 	{
-		if (ship.get()->position != pos)
-		{
-			if (ship.get()->position.x > pos.x)
-			{
-				command_queue.push_back(ship->move(Direction::WEST));
-			}
-			else if (ship.get()->position.x < pos.x)
-			{
-				command_queue.push_back(ship->move(Direction::EAST));
-			}
+		Command outputCommand;
 
-			else if (ship.get()->position.y > pos.y)
-			{
-				command_queue.push_back(ship->move(Direction::SOUTH));
-			}
-			else if (ship.get()->position.y < pos.y)
-			{
-				command_queue.push_back(ship->move(Direction::EAST));
-			}
+		log::log("GoToPos");
+		if (ship->position.x > pos.x)
+		{
+			log::log("GoToPos1");
+			outputCommand = ship->move(Direction::WEST);
 		}
+		else if (ship->position.x < pos.x)
+		{
+			log::log("GoToPos2");
+			outputCommand = ship->move(Direction::EAST);
+		}
+
+		else if (ship->position.y > pos.y)
+		{
+			log::log("GoToPos3");
+			outputCommand = ship->move(Direction::SOUTH);
+		}
+		else if (ship->position.y < pos.y)
+		{
+			log::log("GoToPos4");
+			outputCommand = ship->move(Direction::NORTH);
+		}
+
+		return outputCommand;
 	}
 
-	void moveToTreasure(vector<Command> command_queue, shared_ptr<Ship> scout, GameMap map)
+	Command moveToTreasure(shared_ptr<Ship> scout, GameMap map)
 	{
 		if (treasurePosition.x == NULL)
 		{
@@ -55,7 +61,7 @@ struct AddedMoves
 		}
 
 		//Make the scout got to this cell
-		goToPosition(command_queue, scout, treasurePosition);
+		return goToPosition(scout, treasurePosition);
 	}
 
 	void moveToOutpost()

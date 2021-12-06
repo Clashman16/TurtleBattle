@@ -51,18 +51,19 @@ int main(int argc, char* argv[])
             typedShips.insert(typedShip);
         }
 
-        for (const auto& type_iterator : typedShips) // and for all kinds of ship
+        for (const auto& type_iterator : typedShips) // For all kinds of ship
         {
             if (type_iterator.second == ShipType::Scout) // If the ship is a scout
             {
-                addedMoves.moveToTreasure(command_queue, type_iterator.first, *game_map.get()); //it will find the cell with the most halite
+                Command goToTreasure = addedMoves.moveToTreasure(type_iterator.first, *game_map.get()); //it will find the cell with the most halite
+                command_queue.push_back(goToTreasure);
+                log::log("shipX = " + to_string(type_iterator.first->position.x) + "\t shipY = " + to_string(type_iterator.first->position.y));
+                log::log("treasureX = " + to_string(addedMoves.treasurePosition.x) + "\ttreasureY = " + to_string(addedMoves.treasurePosition.y));
             }
             else
             {
                 command_queue.push_back(type_iterator.first->stay_still());//sinon, mine
             }
-
-            addedMoves.moveToTreasure(command_queue, type_iterator.first, *game_map.get()); //it will find the cell with the most halite
         }
 
         if (shipsCount == 0)
