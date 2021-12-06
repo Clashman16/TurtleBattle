@@ -48,21 +48,33 @@ int main(int argc, char* argv[])
             shared_ptr<Ship> ship = prev(me->ships.end())->second;
 
             pair<shared_ptr<Ship>, ShipType> typedShip(ship, lastSpawnedShip);
-            typedShips.insert(typedShip);
+
+            if (typedShips.find(ship) == typedShips.end())
+            {
+                log::log("new bot spawned");
+                typedShips.insert(typedShip);
+            }
         }
 
         for (const auto& type_iterator : typedShips) // For all kinds of ship
         {
-            if (type_iterator.second == ShipType::Scout) // If the ship is a scout
+            Command move;
+
+            if(type_iterator.second == ShipType::Scout) // If the ship is a scout
             {
-                Command goToTreasure = addedMoves.moveToTreasure(type_iterator.first, *game_map.get()); //it will find the cell with the most halite
-                command_queue.push_back(goToTreasure);
+                move = addedMoves.moveToTreasure(type_iterator.first, *game_map.get()); //it will find the cell with the most halite
+                
                 log::log("shipX = " + to_string(type_iterator.first->position.x) + "\t shipY = " + to_string(type_iterator.first->position.y));
                 log::log("treasureX = " + to_string(addedMoves.treasurePosition.x) + "\ttreasureY = " + to_string(addedMoves.treasurePosition.y));
             }
             else
             {
-                command_queue.push_back(type_iterator.first->stay_still());//sinon, mine
+                
+            }
+
+            if (find(command_queue.begin(), command_queue.end(), move) == command_queue.end())
+            {
+                command_queue.push_back(move);
             }
         }
 
