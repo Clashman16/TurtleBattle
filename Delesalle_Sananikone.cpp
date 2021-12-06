@@ -60,22 +60,35 @@ int main(int argc, char* argv[])
         for (auto& type_iterator : typedShips) // For all kinds of ship
         {
             Command move;
+            log::log(to_string(type_iterator.second));
+            auto ship_it = me->ships.find(type_iterator.first); //get the corresponding ship
 
-            auto ship_it = me->ships.find(type_iterator.first);
-
-            if (ship_it != me->ships.end()) {
-                auto& ship = ship_it->second;
+            if (ship_it != me->ships.end()) // If the ship exist
+            {
+                auto& ship = ship_it->second; //use it
 
                 if (game_map->at(ship)->halite < constants::MAX_HALITE / 10 || ship->is_full())
                 {
-                    if (type_iterator.second == ShipType::Scout) // If the ship is a scout
+                    switch (type_iterator.second)
                     {
-                        move = addedMoves.moveToTreasure(ship, game_map); //it will find the cell with the most halite
+                        case Scout : // If the ship is a scout
+                            if (ship->position != addedMoves.treasurePosition)
+                            {
+                                move = addedMoves.moveToTreasure(ship, game_map); //it will find the cell with the most halite
+                            }
+                            else
+                            {
+                                type_iterator.second = Beacon;
+                                move = ship->stay_still();
+                            }
+                            break;
+                        case Beacon: // If the ship is a beacon
+                            if(game_map->at(addedMoves.treasurePosition) == 0)
+                            {
+                                type_iterator.second = Picker; //it becomes a picker
+                            }
+                            move = ship->stay_still(); break;
                     }
-                }
-                else
-                {
-                    move = ship->stay_still();
                 }
 
                 if (find(command_queue.begin(), command_queue.end(), move) == command_queue.end())
