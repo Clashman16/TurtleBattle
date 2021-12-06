@@ -1,11 +1,2 @@
-﻿  Delesalle_Sananikone.cpp
-  command.cpp
-  constants.cpp
-  dropoff.cpp
-  game.cpp
-  game_map.cpp
-  log.cpp
-  player.cpp
-  ship.cpp
-  Génération de code en cours...
+﻿  shipType.cpp
   Delesalle_Sananikone.vcxproj -> C:\Users\banan\Documents\GitHubKraken\TurtleBattle\Debug\Delesalle_Sananikone.exe

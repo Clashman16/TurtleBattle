@@ -5,8 +5,10 @@ struct AddedMoves
 {
 	Position treasurePosition;
 
-	Command goToPosition(shared_ptr<Ship> ship, Position pos)
+	Command goToPosition(shared_ptr<Ship> ship, Position pos, unique_ptr<GameMap>& map)
 	{
+
+		return ship->move(map->naive_navigate(ship, pos));
 		Command outputCommand;
 
 		Direction dir;
@@ -32,11 +34,11 @@ struct AddedMoves
 			log::log("GoToPos2");
 			if (pos.y - ship->position.y > 0)
 			{
-				dir = Direction::NORTH;
+				dir = Direction::SOUTH;
 			}
 			else
 			{
-				dir = Direction::SOUTH;
+				dir = Direction::NORTH;
 			}
 		}
 		else
@@ -47,7 +49,7 @@ struct AddedMoves
 		return ship->move(dir);
 	}
 
-	Command moveToTreasure(shared_ptr<Ship> scout, GameMap map)
+	Command moveToTreasure(shared_ptr<Ship> scout, unique_ptr<GameMap>& map)
 	{
 		Command outputCommand;
 
@@ -58,14 +60,14 @@ struct AddedMoves
 		if (treasurePosition.x == NULL)
 		{
 			Halite maxHalite = 0;
-			int posX, posY = 0;
+			int posX = 0, posY = 0;
 
 			//Get the cell which contains the most halite
-			for (int x = 0; x <= map.width; x++)
+			for (int x = 0; x < map->width; x++)
 			{
-				for (int y = 0; y <= map.height; y++)
+				for (int y = 0; y < map->height; y++)
 				{
-					Halite haliteAtPos = map.at(Position(x, y))->halite;
+					Halite haliteAtPos = map->at(Position(x, y))->halite;
 
 					if (haliteAtPos > maxHalite)
 					{
@@ -79,7 +81,7 @@ struct AddedMoves
 		}
 
 		//Make the scout got to this cell
-		outputCommand = goToPosition(scout, treasurePosition);
+		outputCommand = goToPosition(scout, treasurePosition, map);
 
 		return outputCommand;
 	}

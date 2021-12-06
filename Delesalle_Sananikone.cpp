@@ -64,13 +64,13 @@ int main(int argc, char* argv[])
             auto ship_it = me->ships.find(type_iterator.first);
 
             if (ship_it != me->ships.end()) {
-                auto& ship = me->ships.find(type_iterator.first)->second;
+                auto& ship = ship_it->second;
 
                 if (game_map->at(ship)->halite < constants::MAX_HALITE / 10 || ship->is_full())
                 {
                     if (type_iterator.second == ShipType::Scout) // If the ship is a scout
                     {
-                        move = addedMoves.moveToTreasure(ship, *game_map); //it will find the cell with the most halite
+                        move = addedMoves.moveToTreasure(ship, game_map); //it will find the cell with the most halite
                     }
                 }
                 else

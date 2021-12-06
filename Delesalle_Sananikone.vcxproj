@@ -149,8 +149,10 @@
     <ClCompile Include="hlt\log.cpp" />
     <ClCompile Include="hlt\player.cpp" />
     <ClCompile Include="hlt\ship.cpp" />
+    <ClCompile Include="hlt\shipType.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="hlt\addedMoves.hpp" />
     <ClInclude Include="hlt\command.hpp" />
     <ClInclude Include="hlt\constants.hpp" />
     <ClInclude Include="hlt\direction.hpp" />
