@@ -57,19 +57,15 @@ int main(int argc, char* argv[])
             lastSpawnedShip = Nothing;
         }
 
-        for (const auto& type_iterator : typedShips) // For all kinds of ship
+        for (auto type_iterator : typedShips) // For all kinds of ship
         {
             Command move;
-            log::log(to_string(typedShips.size()));
 
             if (game_map->at(type_iterator.first)->halite < constants::MAX_HALITE / 10 || type_iterator.first->is_full())
             {
                 if (type_iterator.second == ShipType::Scout) // If the ship is a scout
                 {
-                    move = addedMoves.moveToTreasure(type_iterator.first, *game_map.get()); //it will find the cell with the most halite
-
-                    log::log("shipX = " + to_string(type_iterator.first->position.x) + "\t shipY = " + to_string(type_iterator.first->position.y));
-                    log::log("treasureX = " + to_string(addedMoves.treasurePosition.x) + "\ttreasureY = " + to_string(addedMoves.treasurePosition.y));
+                    move = addedMoves.moveToTreasure(type_iterator.first, *game_map); //it will find the cell with the most halite
                 }
             }
             else

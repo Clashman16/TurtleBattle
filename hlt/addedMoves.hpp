@@ -9,35 +9,51 @@ struct AddedMoves
 	{
 		Command outputCommand;
 
+		Direction dir;
+
 		log::log("GoToPos");
-		if (ship->position.x > pos.x)
+
+		log::log("shipX = " + to_string(ship->position.x) + "\t shipY = " + to_string(ship->position.y));
+
+		if(ship->position.x != pos.x)
 		{
 			log::log("GoToPos1");
-			outputCommand = ship->move(Direction::WEST);
+			if (pos.x - ship->position.x >  0)
+			{
+				dir = Direction::EAST;
+			}
+			else
+			{
+				dir = Direction::WEST;
+			}
 		}
-		else if (ship->position.x < pos.x)
+		else if(ship->position.y != pos.y)
 		{
 			log::log("GoToPos2");
-			outputCommand = ship->move(Direction::EAST);
+			if (pos.y - ship->position.y > 0)
+			{
+				dir = Direction::NORTH;
+			}
+			else
+			{
+				dir = Direction::SOUTH;
+			}
+		}
+		else
+		{
+			dir = Direction::STILL;
 		}
 
-		else if (ship->position.y > pos.y)
-		{
-			log::log("GoToPos3");
-			outputCommand = ship->move(Direction::NORTH);
-		}
-		else if (ship->position.y < pos.y)
-		{
-			log::log("GoToPos4");
-			outputCommand = ship->move(Direction::SOUTH);
-		}
-
-		return outputCommand;
+		return ship->move(dir);
 	}
 
 	Command moveToTreasure(shared_ptr<Ship> scout, GameMap map)
 	{
+		Command outputCommand;
+
 		log::log("moveToTreasure");
+
+		log::log("treasureX = " + to_string(treasurePosition.x) + "\ttreasureY = " + to_string(treasurePosition.y));
 
 		if (treasurePosition.x == NULL)
 		{
@@ -63,7 +79,9 @@ struct AddedMoves
 		}
 
 		//Make the scout got to this cell
-		return goToPosition(scout, treasurePosition);
+		outputCommand = goToPosition(scout, treasurePosition);
+
+		return outputCommand;
 	}
 
 	void moveToOutpost()
