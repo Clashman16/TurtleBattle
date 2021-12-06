@@ -54,25 +54,30 @@ int main(int argc, char* argv[])
                 log::log("new bot spawned");
                 typedShips.insert(typedShip);
             }
+            lastSpawnedShip = Nothing;
         }
 
         for (const auto& type_iterator : typedShips) // For all kinds of ship
         {
             Command move;
+            log::log(to_string(typedShips.size()));
 
-            if(type_iterator.second == ShipType::Scout) // If the ship is a scout
+            if (game_map->at(type_iterator.first)->halite < constants::MAX_HALITE / 10 || type_iterator.first->is_full())
             {
-                move = addedMoves.moveToTreasure(type_iterator.first, *game_map.get()); //it will find the cell with the most halite
-                
-                log::log("shipX = " + to_string(type_iterator.first->position.x) + "\t shipY = " + to_string(type_iterator.first->position.y));
-                log::log("treasureX = " + to_string(addedMoves.treasurePosition.x) + "\ttreasureY = " + to_string(addedMoves.treasurePosition.y));
+                if (type_iterator.second == ShipType::Scout) // If the ship is a scout
+                {
+                    move = addedMoves.moveToTreasure(type_iterator.first, *game_map.get()); //it will find the cell with the most halite
+
+                    log::log("shipX = " + to_string(type_iterator.first->position.x) + "\t shipY = " + to_string(type_iterator.first->position.y));
+                    log::log("treasureX = " + to_string(addedMoves.treasurePosition.x) + "\ttreasureY = " + to_string(addedMoves.treasurePosition.y));
+                }
             }
             else
             {
-                
+                move = type_iterator.first->stay_still();
             }
 
-            if (find(command_queue.begin(), command_queue.end(), move) == command_queue.end())
+            if(find(command_queue.begin(), command_queue.end(), move) == command_queue.end())
             {
                 command_queue.push_back(move);
             }
@@ -86,6 +91,7 @@ int main(int argc, char* argv[])
                 lastSpawnedShip = Scout;
             }
         }
+
 
         if (!game.end_turn(command_queue)) {
             break;
