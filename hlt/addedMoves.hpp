@@ -68,12 +68,26 @@ struct AddedMoves
 				for (int y = 0; y < map->height; y++)
 				{
 					Halite haliteAtPos = map->at(Position(x, y))->halite;
+					int dist1 = 0;
+					int dist2 = 0;
 
-					if (haliteAtPos > maxHalite)
+					if (haliteAtPos >= maxHalite)
 					{
 						maxHalite = haliteAtPos;
+
+						if (dist1 != 0)
+						{
+							dist2 = sqrt((x - scout->position.x) ^ 2 + (y - scout->position.y) ^ 2);
+							if (dist2 > dist1)
+							{
+								posX = x;
+								posY = y;
+							}
+						}
+
 						posX = x;
 						posY = y;
+						dist1 = sqrt((x-scout->position.x)^2+(y - scout->position.y)^2);
 					}
 				}
 			}
