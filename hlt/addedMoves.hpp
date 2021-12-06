@@ -24,12 +24,12 @@ struct AddedMoves
 		else if (ship->position.y > pos.y)
 		{
 			log::log("GoToPos3");
-			outputCommand = ship->move(Direction::SOUTH);
+			outputCommand = ship->move(Direction::NORTH);
 		}
 		else if (ship->position.y < pos.y)
 		{
 			log::log("GoToPos4");
-			outputCommand = ship->move(Direction::NORTH);
+			outputCommand = ship->move(Direction::SOUTH);
 		}
 
 		return outputCommand;
@@ -37,6 +37,8 @@ struct AddedMoves
 
 	Command moveToTreasure(shared_ptr<Ship> scout, GameMap map)
 	{
+		log::log("moveToTreasure");
+
 		if (treasurePosition.x == NULL)
 		{
 			Halite maxHalite = 0;
