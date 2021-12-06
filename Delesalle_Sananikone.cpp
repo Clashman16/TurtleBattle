@@ -1,10 +1,10 @@
-#include "game.hpp"
-#include "constants.hpp"
-#include "log.hpp"
-#include "shipType.cpp"
+#include "hlt/game.hpp"
+#include "hlt/constants.hpp"
+#include "hlt/log.hpp"
+#include "hlt/shipType.cpp"
 #include <random>
 #include <ctime>
-#include <addedMoves.hpp>
+#include "hlt/addedMoves.hpp"
 
 using namespace std;
 using namespace hlt;
