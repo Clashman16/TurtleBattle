@@ -106,26 +106,24 @@ struct AddedMoves
 	{
 	}
 
-	void followScout(vector<Command> command_queue, shared_ptr<Ship> Picker, Position treasurePosition) 
+	Command followScout(shared_ptr<Ship> Picker, Position treasurePosition, unique_ptr<GameMap>& map)
 	{
+		Command output;
+		Position postemp;
 		if (Picker.get()->position != treasurePosition) {
-			if (Picker.get()->position.x > treasurePosition.x)
-			{
-				command_queue.push_back(Picker->move(Direction::WEST));
-			}
-			else if (Picker.get()->position.x < treasurePosition.x)
-			{
-				command_queue.push_back(Picker->move(Direction::EAST));
-			}
-
-			else if (Picker.get()->position.y > treasurePosition.y)
-			{
-				command_queue.push_back(Picker->move(Direction::SOUTH));
-			}
-			else if (Picker.get()->position.y < treasurePosition.y)
-			{
-				command_queue.push_back(Picker->move(Direction::EAST));
+			for (int x = treasurePosition.x - 1; x <= treasurePosition.x + 1; x++) {
+				for (int y = treasurePosition.y - 1; y <= treasurePosition.y + 1; y++) {
+					postemp.x = x; postemp.y = y;
+					auto cell = map->at(postemp)->is_empty();
+					if (cell) {
+						output = goToPosition(Picker, postemp, map);
+					}
+				}
 			}
 		}
+		else {
+			output = Picker->stay_still();
+		}
+		return output;
 	}
 };
