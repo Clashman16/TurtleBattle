@@ -7,20 +7,19 @@ struct AddedMoves
 
 	Command goToPosition(shared_ptr<Ship> ship, Position pos, unique_ptr<GameMap>& map)
 	{
-
-		return ship->move(map->naive_navigate(ship, pos));
 		Command outputCommand;
 
 		Direction dir;
-
-		log::log("GoToPos");
-
 		log::log("shipX = " + to_string(ship->position.x) + "\t shipY = " + to_string(ship->position.y));
 
 		if(ship->position.x != pos.x)
 		{
-			log::log("GoToPos1");
-			if (pos.x - ship->position.x >  0)
+			if(ship->position.x >= 0 && ship->position.x <= map->width/4 && pos.x >= 3/4*map->width && pos.x <= map->width)
+			{
+				dir = Direction::WEST;
+			}
+
+			if(pos.x - ship->position.x >  0 || (pos.x >= 0 && pos.x <= map->width/4 && ship->position.x >= 3/4 * map->width && ship->position.x <= map->width))
 			{
 				dir = Direction::EAST;
 			}
@@ -31,8 +30,12 @@ struct AddedMoves
 		}
 		else if(ship->position.y != pos.y)
 		{
-			log::log("GoToPos2");
-			if (pos.y - ship->position.y > 0)
+			if (ship->position.y >= 0 && ship->position.y <= map->height/4 && pos.y >= 3/4 * map->height && pos.y <= map->height)
+			{
+				dir = Direction::NORTH;
+			}
+
+			if (pos.y - ship->position.y > 0 || (pos.y >= 0 && pos.y <= map->height/4 && ship->position.y >= 3/4 * map->height && ship->position.y <= map->height))
 			{
 				dir = Direction::SOUTH;
 			}
@@ -52,11 +55,6 @@ struct AddedMoves
 	Command moveToTreasure(shared_ptr<Ship> scout, unique_ptr<GameMap>& map)
 	{
 		Command outputCommand;
-
-		log::log("moveToTreasure");
-
-		log::log("treasureX = " + to_string(treasurePosition.x) + "\ttreasureY = " + to_string(treasurePosition.y));
-
 		if (treasurePosition.x == NULL)
 		{
 			Halite maxHalite = 0;
